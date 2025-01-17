@@ -5,7 +5,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { AppResponse } from "../utils/ApiResponse.js";
 
 const cookieOptions = {
-  maxAge: 24 * 60 * 60 * 1000,
+  maxAge: 24 * 60 * 60 * 1000,  // 24 hours
   secture: true,
   httpOnly: true,
 };

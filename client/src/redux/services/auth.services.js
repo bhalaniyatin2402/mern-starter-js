@@ -3,36 +3,42 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `http://localhost:3000/api/v1`,
+    baseUrl: `${import.meta.env.VITE_SERVER_URL}/api`,
     credentials: "include"
   }),
+  tagTypes: ["User"],
   endpoints: (builder) => ({
     register: builder.mutation({
       query: (data) => ({
-        url: "/user/register",
+        url: "/register",
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["User"]
     }),
     login: builder.mutation({
       query: (data) => ({
-        url: "/user/login",
+        url: "/login",
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["User"]
     }),
     getUserDetails: builder.query({
-      query: () => "/user/me",
+      query: () => "/me",
+      providesTags: ["User"]
     }),
     updateUserDetails: builder.mutation({
       query: (data) => ({
-        url: "/user/me",
+        url: "/me",
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["User"]
     }),
     logout: builder.mutation({
-      query: () => "/user/logout",
+      query: () => "/logout",
+      invalidatesTags: ["User"]
     }),
   }),
 });
