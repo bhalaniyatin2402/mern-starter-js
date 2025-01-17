@@ -1,3 +1,4 @@
+import http from "http"
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -5,6 +6,7 @@ import cors from "cors";
 import { corsOptions } from "./utils/constants.js";
 
 const app = express();
+const server = http.createServer(app)
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -28,4 +30,4 @@ app.post("*", (req, res) => {
  
 app.use(errorMiddleware)
 
-export default app;
+export default server;

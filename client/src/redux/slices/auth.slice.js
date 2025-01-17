@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoggedIn: false,
+  wsClientId: null
 };
 
 const authSlice = createSlice({
@@ -11,8 +12,11 @@ const authSlice = createSlice({
     setCredentials(state, action) {
       state.isLoggedIn = action.payload.isLoggedIn;
     },
+    setWsClientId(state, action) {
+      state.wsClientId = action.payload;
+    }
   },
 });
 
 export default authSlice.reducer;
-export const { setCredentials } = authSlice.actions;
+export const { setCredentials, setWsClientId } = authSlice.actions;

@@ -1,8 +1,11 @@
 import bcrypt from "bcryptjs";
+
 import User from "../models/user.model.js";
+
 import asyncHandler from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { AppResponse } from "../utils/ApiResponse.js";
+import { clients } from "../config/websocket.js";
 
 const cookieOptions = {
   maxAge: 24 * 60 * 60 * 1000,  // 24 hours
@@ -56,6 +59,15 @@ export const register = asyncHandler(async (req, res, next) => {
 
   await user.save();
 
+  const requestingClientId = req.headers['x-websocket-client'];
+  console.log("requestingClientId", requestingClientId);
+
+  clients.forEach((client, clientId) => {
+    if (client.readyState === 1 && clientId !== requestingClientId) {
+      client.send(JSON.stringify({ type: "userlist" }))
+    }
+  })
+
   res.status(200).json(new AppResponse(201, [], "user created successfully"));
 });
 
@@ -105,6 +117,18 @@ export const login = asyncHandler(async (req, res, next) => {
 
 export const getUserDetails = asyncHandler(async (req, res, next) => {
   res.status(200).json(new AppResponse(200, req.user, "user details"));
+});
+
+/**
+ * @USER_LIST
+ * @ROUTE @GET  
+ * @ACCESS public {{url}}/api/v1/user/login
+ */
+
+export const getUsersList = asyncHandler(async (req, res, next) => {
+  const users = await User.find();
+
+  res.status(200).json(new AppResponse(200, users, "user list"));
 });
 
 /**

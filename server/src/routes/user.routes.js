@@ -6,12 +6,14 @@ import {
   updateUser,
   logout,
   getUserDetails,
+  getUsersList,
 } from "../controllers/user.controllers.js";
 
 const router = Router();
 
 router.route("/register").post(register);
 router.route("/login").post(login);
+router.route("/list").get(isLooggedIn, getUsersList)
 router
   .route("/me")
   .get(isLooggedIn, getUserDetails)
